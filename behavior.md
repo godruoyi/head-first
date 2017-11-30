@@ -52,10 +52,13 @@ abstract public class Character
     {
         $this->weapon = $weapon;
     }
-    
-    public function fight()
+
+    /**
+     * 获取角色战斗力
+     */
+    public function fightPower()
     {
-        return $this->weapon->
+        return $this->weapon->useWeapon()
     }
 }
 ```
@@ -84,7 +87,10 @@ class Queen extends Character
 
 ## 战斗
 
-
+```php
+(new King)->fightPower(); //1024;
+(new Queen)->fightPower(); //1;
+```
 
 
 
