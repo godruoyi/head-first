@@ -8,7 +8,7 @@
 
 类图设计如下
 
-![](/assets/策略模式.png)
+![](/assets/策略模式 %281%29.png)
 
 ```php
 interface WeaponBehavior
