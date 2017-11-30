@@ -6,6 +6,10 @@
 
 一个冒险游戏，有多个游戏角色可以使用不同的武器，游戏中角色可以自由的切换武器,每个角色一次只能使用一样武器.
 
+类图设计如下
+
+![](/assets/绘制Objective-C程序的UML类图.png)
+
 ```php
 interface WeaponBehavior
 {
