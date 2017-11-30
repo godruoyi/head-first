@@ -17,22 +17,24 @@ interface WeaponBehavior
 }
 ```
 
-各种武器的具体实现类
+武器的具体实现类
 
 ```php
 class KnifeBehavior implements WeaponBehavior
 {
-    public function setWeapon()
+    public function useWeapon()
     {
         //使用小刀
+        return 1;
     }
 }
 
 class SwordBehavior implements WeaponBehavior
 {
-    public function setWeapon()
+    public function useWeapon()
     {
         //使用大保健
+        return 1024;
     }
 }
 
@@ -50,10 +52,15 @@ abstract public class Character
     {
         $this->weapon = $weapon;
     }
+    
+    public function fight()
+    {
+        return $this->weapon->
+    }
 }
 ```
 
-各种角色的具体实现.
+角色的具体实现.
 
 ```php
 class King extends Character
@@ -74,6 +81,10 @@ class Queen extends Character
     }
 }
 ```
+
+## 战斗
+
+
 
 
 
