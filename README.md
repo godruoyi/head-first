@@ -2,7 +2,5 @@
 
 [behavior](/behavior.md)
 
-
-
-!\[sss\]\(/behavior.md\)
+\[sss\]\(/behavior.md\)
 
