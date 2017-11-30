@@ -10,7 +10,7 @@
 
 ![](/assets/策略模式.png)
 
-**代码实现**
+抽象的武器行为接口
 
 ```php
 interface WeaponBehavior
