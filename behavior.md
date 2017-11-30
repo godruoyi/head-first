@@ -69,7 +69,7 @@ class Queen extends Character
 {
     public function __construct()
     {
-        //国王使用匕首
+        //王后使用匕首
         $this->setWeapon(new KnifeBehavior);
     }
 }
