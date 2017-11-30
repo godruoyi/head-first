@@ -8,7 +8,7 @@
 
 类图设计如下
 
-![](/assets/绘制Objective-C程序的UML类图.png)
+![](/assets/策略模式.png)
 
 ```php
 interface WeaponBehavior
