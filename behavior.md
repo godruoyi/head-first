@@ -61,7 +61,16 @@ class King extends Character
     public function __construct()
     {
         //国王使用斧头
-        $this->setWeapon(new AxeBehavior);
+        $this->setWeapon(new SwordBehavior);
+    }
+}
+
+class Queen extends Character
+{
+    public function __construct()
+    {
+        //国王使用匕首
+        $this->setWeapon(new KnifeBehavior);
     }
 }
 ```
