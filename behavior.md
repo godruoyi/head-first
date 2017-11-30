@@ -2,9 +2,7 @@
 
 > 定义了算法族，分别封装起来，让他们之间可以相互调用，此模式让算法的变化独立与调用算法的客户端。
 
-
-
-##  设计谜题
+## 设计谜题
 
 一个冒险游戏，有多个游戏角色可以使用不同的武器，游戏中角色可以自由的切换武器,每个角色一次只能使用一样武器.
 
@@ -55,33 +53,18 @@ abstract public class Character
 }
 ```
 
+各种角色的具体实现.
 
-
-具体角色
-
-
-
-\`\`\`php
-
+```php
 class King extends Character
-
 {
-
-    public function \_\_construct\(\)
-
+    public function __construct()
     {
-
         //国王使用斧头
-
-        $this-&gt;setWeapon\(new AxeBehavior\);
-
+        $this->setWeapon(new AxeBehavior);
     }
-
 }
-
-
-
-\`\`\`
+```
 
 
 
