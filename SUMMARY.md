@@ -1,5 +1,5 @@
 # Summary
 
 * [Introduction](README.md)
-* [behavior](策略模式.md)
+* [策略模式1](ce-lve-mo-shi-1.md)
 
