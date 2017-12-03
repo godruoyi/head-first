@@ -2,5 +2,3 @@
 
 [behavior](/behavior.md)
 
-\[sss\]\(\#behavior.md\)
-
