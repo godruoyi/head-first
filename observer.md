@@ -24,9 +24,9 @@ image
 interface Sublect
 {
     public function registerObserver(Observer $observer);
-    
+
     public function removeObserver();
-    
+
     public function nitifyObservers();
 }
 ```
@@ -61,12 +61,17 @@ class WeatherData implements Sublect
         }
     }
     
+    public function onChanged()
+    {
+        $this->nitifyObservers();
+    }
+
     //获取最新气压
     public function getPressure()
     {
         return $this->pressure;
     }
-    
+
     //获取最新温度
     public function getTemperature()
     {
@@ -78,7 +83,7 @@ class WeatherData implements Sublect
     {
         return $this->humidity;
     }
-    
+
     //测试
     public function youNeedChanged()
     {
@@ -140,6 +145,8 @@ class CurrentConditionsDisplay implements Observer, DisplayElement
         echo "Current pressure: {$this->pressure}, Current temperature: {$this->temperature}";
     }
 }
+
+//其他两种布告板省略
 ```
 
 测试
@@ -151,11 +158,118 @@ $display = new CurrentConditionsDisplay($weatherData);//把当前布告栏注册
 //$other = new OthersDisplay($weatherData);//把当前布告栏注册成为观察者
 //$other = new OtherDisplay($weatherData);//把当前布告栏注册成为观察者
 
-$weatherData->youNeedChanged();//气象站数据更新了
+$weatherData->youNeedChanged();//气象站数据更新了会导致布告板实时更新
 //Current pressure: 33, Current temperature: 46
-
-
 ```
 
+## 另一种形式的观察者模式
 
+我们知道,观察者总是被动的接受主题对象的推送,但有些场景下,我们希望观察者能主动的去获取数据;毕竟观察者数量这么多,主题对象不可能事先知道每个观察者需要的状态,并且也不会导致明明只需要一点点数据,却被迫收到一堆.
+
+我们来重写设计上面的问题.
+
+images
+
+类图基本保持不变,只是在`WeatherData`类新增了`setChanged`方法并改变了`Observer`接口`update`签名.
+
+重构后的主题接口
+
+```php
+interface Sublect
+{
+    public function registerObserver(Observer $observer);
+    public function removeObserver();
+    public function nitifyObservers($args = null);
+}
+```
+
+重构后的主题对象
+
+```php
+class WeatherData implements Sublect
+{
+    protected $observers = [];
+
+    protected $pressure, $temperature, $humidity, $changed;
+
+    public function nitifyObservers($args = null)
+    {
+        if ($this->changed) {
+            foreach ($this->observers as $observer) {
+                $observer->update($this, $args);
+            }
+            $this->changed = false;
+        }
+    }
+    
+    public function onChanged()
+    {
+        $this->setChanged();
+        
+        $this->nitifyObservers([
+            'pressure' => $this->pressure,
+            'temperature' => $this->temperature,
+            'humidity' => $this->humidity,
+        ]);
+    }
+    
+    public function setChanged()//新增方法
+    {
+        $this->changed = true;
+    }
+    
+    //其他方法保持不变
+}
+```
+
+重构后的布告板对象
+
+```php
+interface Observer
+{
+    public function update(Sublect $subject, $object = null);
+}
+
+
+class CurrentConditionsDisplay implements Observer, DisplayElement
+{
+    protected $subject;
+
+    protected $pressure, $temperature, $humidity;
+
+    //这里为什么会保留 Subject 接口的引用是为了方便的 remove 及 registe
+    public function __construct(Sublect $subject)
+    {
+        $this->subject = $subject;
+        $this->subject->registerObserver($this);
+    }
+
+    public function update(Sublect $subject, $object = null)
+    {
+        if ($subject instanceof Sublect) {
+            //你可以用 拉取 的形式获取最新数据
+            $this->pressure = $subject->getPressure();
+            $this->temperature = $subject->getTemperature();
+            $this->humidity = $subject->getHumidity();
+            
+            //也可以从推送数据中获取
+            $this->pressure = $object['pressure'];
+            $this->temperature = $object['temperature'];
+            $this->humidity = $object['humidity'];
+        }
+
+
+        $this->display();
+    }
+
+    public function display()
+    {
+        echo "Current pressure: {$this->pressure}, Current temperature: {$this->temperature}";
+    }
+}
+```
+
+为什么要加一个 `setChanged` 方法
+
+setChanged 让你在更新观察者时,有更多的弹性,能更适当的通知观察者,比方说,如果没有setCanged方法,气象站温度变化十分之一度时,都会通知所有观察者,你肯定不想让这么频繁的更新吧.我们可以控制温度变化达到一度时,调用setChanged,进行有效的更新.
 
