@@ -1,7 +1,5 @@
 # Summary
 
 * [Introduction](README.md)
-* [behavior](behavior.md)
-
-
+* [behavior](策略模式.md)
 
