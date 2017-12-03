@@ -60,7 +60,7 @@ class WeatherData implements Sublect
             $observer->update($this->getPressure(), $this->getTemperature(), $this->getHumidity());
         }
     }
-    
+
     public function onChanged()
     {
         $this->nitifyObservers();
@@ -168,8 +168,6 @@ $weatherData->youNeedChanged();//气象站数据更新了会导致布告板实�
 
 我们来重写设计上面的问题.
 
-images
-
 类图基本保持不变,只是在`WeatherData`类新增了`setChanged`方法并改变了`Observer`接口`update`签名.
 
 重构后的主题接口
@@ -180,6 +178,11 @@ interface Sublect
     public function registerObserver(Observer $observer);
     public function removeObserver();
     public function nitifyObservers($args = null);
+}
+
+interface Observer
+{
+    public function update(Sublect $subject, $object = null);
 }
 ```
 
@@ -201,23 +204,23 @@ class WeatherData implements Sublect
             $this->changed = false;
         }
     }
-    
+
     public function onChanged()
     {
         $this->setChanged();
-        
+
         $this->nitifyObservers([
             'pressure' => $this->pressure,
             'temperature' => $this->temperature,
             'humidity' => $this->humidity,
         ]);
     }
-    
+
     public function setChanged()//新增方法
     {
         $this->changed = true;
     }
-    
+
     //其他方法保持不变
 }
 ```
@@ -225,12 +228,6 @@ class WeatherData implements Sublect
 重构后的布告板对象
 
 ```php
-interface Observer
-{
-    public function update(Sublect $subject, $object = null);
-}
-
-
 class CurrentConditionsDisplay implements Observer, DisplayElement
 {
     protected $subject;
@@ -251,7 +248,7 @@ class CurrentConditionsDisplay implements Observer, DisplayElement
             $this->pressure = $subject->getPressure();
             $this->temperature = $subject->getTemperature();
             $this->humidity = $subject->getHumidity();
-            
+
             //也可以从推送数据中获取
             $this->pressure = $object['pressure'];
             $this->temperature = $object['temperature'];
